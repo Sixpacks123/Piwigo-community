@@ -5,12 +5,59 @@
 
 {literal}
 <style>
-form fieldset p {text-align:left;margin:0 0 1.5em 0;line-height:20px;}
+form{text-align :center ; align:center;}
+form fieldset p {text-align:left;margin:0 0 1em 0;line-height:20px;}
+form fieldset strong {color: #A4A4A4;
+  font-weight: bold;
+  font-size: 1.1em;
+  margin-bottom: 5px;}
+form legend{
+    font-size: 1.4em ;
+    text-align:center ;
+}
+.form div ::before {
+  margin-top: 10px;
+  margin-left: 220px;}
+  .user-property-selector1 .user-property-select-container::before {margin-left: 240px;}
+  .user-property-selector2 .user-property-select-container::before {margin-left: 118px;}
+  .user-property-selector3 .user-property-select-container::before {margin-left: 388px;}
+
+
+form fieldset select {
+box-sizing: border-box;
+  -webkit-appearance: none;
+  border: none;
+  width: 100%;
+  padding: 10px;
+  font-size: 1.1em;}
 .permissionActions {text-align:center;height:20px}
 .permissionActions a:hover {border:none}
 .permissionActions img {margin-bottom:-2px}
 .rowSelected {background-color:#C2F5C2 !important}
+.permissionCase { display:block;border-radius:15px;
+  position:absolute;
+  left:50%;
+  top: 50%;
+  transform:translate(-50%, -48%);
+  background-color:white;}
+.permsissionBlock{  position: fixed;
+  z-index: 100;
+  left: 0;
+  top: 0;
+  width: 100%; 
+  height: 100%;
+  overflow: auto; 
+  background-color: rgba(0,0,0,0.7);}
+.icon {text-align:center !important; margin-top:30px;}
+  .icon span{text-align:center !important;   background-color: #ffe6cf;
+  color: #ffa352;}
+  .user-property-mid-share{display:flex;flex-direction:row; gap:5px}
+  .user-property-one{width:65%}
+    .user-property-two{width:35%}
 #community_nb_photos, #community_storage {width:400px; display:inline-block; margin-right:10px;}
+  
+   input[type="checkbox"] {
+  clip-path: circle(47% at 50% 50%);  }
 </style>
 {/literal}
 
@@ -125,6 +172,14 @@ $(document).ready(function() {
       jQuery("input[name=nb_photos]").val(nbPhotosValues[ui.value]);
     }
   });
+jQuery("#community_nb_photos").css({"background" : "orange" , "height": "4px" });
+jQuery("#community_nb_photos .ui-slider-handle").css({
+    "width": "10px", 
+    "height": "10px",
+    "border-radius": "50%", 
+    "border" : "none",
+    "background": "orange" 
+});
 
   var storageValues = [10,50,100,200,500,1000,5000,-1];
 
@@ -157,36 +212,71 @@ $(document).ready(function() {
     }
   });
 
+  jQuery("#community_storage .ui-slider-handle").html('').css("border", "none");
+jQuery("#community_storage .ui-slider-range").css("height", "4px"); 
+
+jQuery("#community_storage").css({"background" : "orange" , "height": "4px" });
+jQuery("#community_storage .ui-slider-handle").css({
+    "width": "10px", 
+    "height": "10px",
+    "border-radius": "50%", 
+    "border" : "none",
+    "background": "orange" 
+});
+jQuery("#community_storage .ui-slider-handle").html('').css("border", "none");
+jQuery("#community_storage .ui-slider-range").css("height", "4px"); 
+
 });
 {/literal}{/footer_script}
 
 {if not isset($edit)}
 <a id="displayForm" href="#">{'Add a permission'|@translate}</a>
 {/if}
-
+<div class="permsissionBlock" name="add_permission"  {if not isset($edit)}style="display:none"{/if}>
+<div class="permissionCase">
+<a class="icon-cancel CloseUserList CloseGuestUserList" href="{$F_ADD_ACTION}"></a>
 <form method="post" name="add_permission" action="{$F_ADD_ACTION}" class="properties" {if not isset($edit)}style="display:none"{/if}>
+      <div class="icon">
+<span class="AddIcon icon icon-plus-circled"></span></div>
   <fieldset>
-    <legend>{if isset($edit)}{'Edit a permission'|@translate}{else}{'Add a permission'|@translate}{/if}</legend>
-
+    <legend align=center>{if isset($edit)}{'Edit a permission'|@translate}{else}{'Add a permission'|@translate}{/if}</legend>
     <p>
-      <strong>{'Who?'|@translate}</strong>
-      <br>
+      <strong >{'Who?'|@translate}</strong>
+      <div class="user-property-mid-share">
+      <div class="user-property-one"> 
+      <div class="user-property-selector1"> 
+       <div class="user-property-select-container">
       <select name="who">
 {html_options options=$who_options selected=$who_options_selected}
       </select>
-
+      </div>
+      </div>
+      </div>
+            <div class="user-property-two"> 
+                  <div class="user-property-selector2"> 
+           <div name="who_user" class="user-property-select-container" {if not isset($user_options_selected)}style="display:none"{/if}>
       <select name="who_user" {if not isset($user_options_selected)}style="display:none"{/if}>
+
 {html_options options=$user_options selected=$user_options_selected}
       </select>
-
+      </div>
+</div>
+      <div class="user-property-selector2"> 
+       <div name="who_group" class="user-property-select-container" {if not isset($user_options_selected)}style="display:none"{/if}>
       <select name="who_group" {if not isset($group_options_selected)}style="display:none"{/if}>
 {html_options options=$group_options selected=$group_options_selected}
       </select>
+      </div>
+      </div>
+      </div>
+          </div>
+
     </p>
 
     <p>
       <strong>{'Where?'|@translate}</strong> {if $community_conf.user_albums}<em id="userAlbumInfo">{'(in addition to user album)'|@translate}</em>{/if}
-      <br>
+            <div class="user-property-selector3"> 
+             <div class="user-property-select-container">
       <select class="categoryDropDown" name="category">
 {if $community_conf.user_albums}
         <option value="-1"{if $user_album_selected} selected="selected"{/if} id="userAlbumOption">{'User album only'|@translate}</option>
@@ -195,42 +285,61 @@ $(document).ready(function() {
         <option disabled="disabled">------------</option>
         {html_options options=$category_options selected=$category_options_selected}
       </select>
+      </div>
+</div>
+  
       <br>
-      <label><input type="checkbox" name="recursive" {if $recursive}checked="checked"{/if}> {'Apply to sub-albums'|@translate}</label>
-      <br>
-      <label><input type="checkbox" name="create_subcategories" {if $create_subcategories}checked="checked"{/if}> {'ability to create sub-albums'|@translate}</label>
+      <label>
+  <input type="checkbox" name="recursive" {if $recursive}checked="checked"{/if}>
+  <span>{'Apply to sub-albums'|@translate}</span>
+</label>
+<br>
+<label>
+  <input type="checkbox" name="create_subcategories" {if $create_subcategories}checked="checked"{/if}>
+  <span>{'ability to create sub-albums'|@translate}</span>
+</label>
+
     </p>
 
     <p>
       <strong>{'Which level of trust?'|@translate}</strong>
-      <br><label><input type="radio" name="moderated" value="true" {if $moderated}checked="checked"{/if}> <em>{'low trust'|@translate}</em> : {'uploaded photos must be validated by an administrator'|@translate}</label>
-      <br><label><input type="radio" name="moderated" value="false" {if not $moderated}checked="checked"{/if}> <em>{'high trust'|@translate}</em> : {'uploaded photos are directly displayed in the gallery'|@translate}</label>
+      <span class="icon-info-circled-1" style="color:orange;font-size:1.1em" title="{'low trust'|@translate} : {'uploaded photos must be validated by an administrator'|@translate} 
+{'high trust'|@translate} : {'uploaded photos are directly displayed in the gallery'|@translate} "></span>
+      <br><label><input type="radio" name="moderated" value="true" {if $moderated}checked="checked"{/if}>
+       <em>{'low trust'|@translate}</em></label>
+      <br><label><input type="radio" name="moderated" value="false" {if not $moderated}checked="checked"{/if}>
+       <em>{'high trust'|@translate}</em> </label>
     </p>
 
     <p style="margin-bottom:0">
       <strong>{'How many photos?'|@translate}</strong>
+       <span style="color:orange; font-size:0.8em;" id="community_nb_photos_info">{'no limit'|@translate}</span>
+    <input style="color:orange; font-size:0.8em;" type="hidden" name="nb_photos" value="{$nb_photos}">
     </p>
     <div id="community_nb_photos"></div>
-    <span id="community_nb_photos_info">{'no limit'|@translate}</span>
-    <input type="hidden" name="nb_photos" value="{$nb_photos}">
+   
 
     <p style="margin-top:1.5em;margin-bottom:0;">
       <strong>{'How much disk space?'|@translate}</strong>
+      <span style="color:orange; font-size:0.8em;" id="community_storage_info">{'no limit'|@translate}</span>
+    <input style="color:orange; font-size:0.8em;" type="hidden" name="storage" value="{$storage}">
     </p>
     <div id="community_storage"></div>
-    <span id="community_storage_info">{'no limit'|@translate}</span>
-    <input type="hidden" name="storage" value="{$storage}">
+   
 
     {if isset($edit)}
       <input type="hidden" name="edit" value="{$edit}">
     {/if}
     
-    <p style="margin-top:1.5em;">
-      <input class="submit" type="submit" name="submit_add" value="{if isset($edit)}{'Submit'|@translate}{else}{'Add'|@translate}{/if}"/>
+    <p style="margin-top:1.5em; text-align:center;">
+      <input class="submit" type="submit" name="submit_add" value="{if isset($edit)}{'Submit'|@translate}{else}+ {'Add'|@translate}{/if}"/>
+          <span style="margin-right: 10px;"></span> <!-- Espace vide -->
       <a href="{$F_ADD_ACTION}">{'Cancel'|@translate}</a>
     </p>
   </fieldset>
 </form>
+</div>
+</div>
 
 <table class="table2" style="margin:15px auto;">
   <tr class="throw">
