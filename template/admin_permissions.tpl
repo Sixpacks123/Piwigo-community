@@ -11,10 +11,10 @@
 {/literal}{/footer_script}
 
 {if not isset($edit)}
-<div style="display:flex; flex-grow:1;">
+<div style="display:flex;">
   <div style="display:flex; align-items: center;">
 <a id="displayForm" href="#" >
-  <div class=" permission-header-button" style="margin: auto;">
+  <div class=" permission-header-button" >
     <label class="head-button-2 icon-plus-circled">
      <span>{'Add a permission'|@translate}</span>
     </label>
