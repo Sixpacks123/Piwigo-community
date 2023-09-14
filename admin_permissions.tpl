@@ -6,11 +6,98 @@
 {literal}
 <style>
 form fieldset p {text-align:left;margin:0 0 1.5em 0;line-height:20px;}
-.permissionActions {text-align:center;height:20px}
+.permissionActions {text-align:right !important;}
 .permissionActions a:hover {border:none}
 .permissionActions img {margin-bottom:-2px}
-.rowSelected {background-color:#C2F5C2 !important}
 #community_nb_photos, #community_storage {width:400px; display:inline-block; margin-right:10px;}
+/* Permission Table */
+#permission-table {
+  margin-top: 30px;
+  position: relative;
+  font-family: "Open Sans", "Lucida Grande",Verdana,Arial,"Bitstream Vera Sans",sans-serif;
+}
+#permission-table-content {
+  width:97%;
+  border:0;
+  border-collapse:separate;
+  border-spacing: 0 1em;
+}
+
+#permission-table-content th,
+#permission-table-content td{
+  text-align:left;
+  padding:5px;
+  font-size:12px;
+}
+
+
+table,
+#permission-table-content thead tr{
+  text-align: left;
+  font-size: 1.1em;
+  font-weight: bold;
+  margin-top: 20px;
+  color: #9e9e9e;
+  background-color:transparent!important;
+  box-shadow:none;
+
+}
+#permission-table-content tr{
+  box-shadow: 0 2px 2px #00000024;
+  background-color: #F3F3F3;
+  height: 50px;
+  border-radius: 10px;
+}
+#permission-table-content td:first-child{
+  border-top-left-radius:10px;
+  border-bottom-left-radius: 10px;
+}
+#permission-table-content td:last-child{
+  border-top-right-radius: 10px;
+  border-bottom-right-radius: 10px;
+}
+
+.permission-header-id{
+    width: 5%;
+}
+.permission-header-who{
+  width: 20%;
+  max-width: 195px;
+}
+.permission-header-where{
+  width: 15%;
+  max-width: 195px;
+}
+.permission-header-trust{
+  width: 10%;
+  max-width: 195px;
+}
+.permission-header-options{
+  width: 40%;
+  max-width: 195px;
+}
+.permission-header-actions{
+  width: 20%;
+  max-width: 195px;
+  display: none;
+
+}
+
+.permission-col {
+   text-align: left;
+   padding: 0;
+
+ }
+
+
+.permission-header-button {
+  position:relative;
+  padding:5px;
+
+}
+.lineView .user-container .tmp-edit {
+  display: flex;
+}
 </style>
 {/literal}
 
@@ -161,7 +248,17 @@ $(document).ready(function() {
 {/literal}{/footer_script}
 
 {if not isset($edit)}
-<a id="displayForm" href="#">{'Add a permission'|@translate}</a>
+<div style="display:flex; flex-grow:1;">
+  <div style="display:flex; align-items: center;">
+<a id="displayForm" href="#" >
+  <div class=" permission-header-button" style="margin: auto;">
+    <label class="head-button-2 icon-plus-circled">
+     <span>{'Add a permission'|@translate}</span>
+    </label>
+  </div>
+</a>
+  </div>
+</div>
 {/if}
 
 <form method="post" name="add_permission" action="{$F_ADD_ACTION}" class="properties" {if not isset($edit)}style="display:none"{/if}>
@@ -224,44 +321,62 @@ $(document).ready(function() {
     {if isset($edit)}
       <input type="hidden" name="edit" value="{$edit}">
     {/if}
-    
+
     <p style="margin-top:1.5em;">
       <input class="submit" type="submit" name="submit_add" value="{if isset($edit)}{'Submit'|@translate}{else}{'Add'|@translate}{/if}"/>
       <a href="{$F_ADD_ACTION}">{'Cancel'|@translate}</a>
     </p>
   </fieldset>
 </form>
+<div id="permission-table">
+  <table id="permission-table-content">
+    <thead class="table-head">
+    <tr>
+      <th class="permission-header-id">#</th>
+      <th class="permission-header-who">{'Who?'|@translate}</th>
+      <th class="permission-header-where">{'Where?'|@translate}</th>
+      <th class="permission-header-trust">{'Trust'|@translate}</th>
+      <th class="permission-header-options">{'Options'|@translate}</th>
+      <th class="permission-header-actions">{'Actions'|@translate}</th>
+    </tr>
+    </thead>
+    {if not empty($permissions)}
+      {foreach from=$permissions item=permission name=permission_loop}
+        <tr class="permission-col">
+          <td>{$permission.ID}</td>
+          <td class="permission-container-who">{$permission.WHO}</td>
+          <td>{$permission.WHERE}</td>
+          <td>
+            <span title="{$permission.TRUST_TOOLTIP}">{$permission.TRUST}</span>
+          </td>
+          <td class="permission-col-options">
+            {if $permission.RECURSIVE}
+              <span title="{$permission.RECURSIVE_TOOLTIP}">{'sub-albums'|@translate}</span>
+            {/if}
+            {if $permission.NB_PHOTOS}
+              {if $permission.RECURSIVE},{/if}
+              <span title="{$permission.NB_PHOTOS_TOOLTIP}">{'%d photos'|@translate|sprintf:$permission.NB_PHOTOS}</span>
+            {/if}
+            {if $permission.STORAGE}
+              {if $permission.RECURSIVE or $permission.NB_PHOTOS},{/if}
+              <span title="{$permission.STORAGE_TOOLTIP}">{$permission.STORAGE}MB</span>
+            {/if}
+            {if $permission.CREATE_SUBCATEGORIES}
+              {if $permission.RECURSIVE or $permission.NB_PHOTOS or $permission.STORAGE},{/if}
+              {'sub-albums creation'|@translate}
+            {/if}
+          </td>
+          <td class="permissionActions">
+            <a href="{$permission.U_EDIT}">
+              <span class="icon-pencil" style="font-size: 18px;"></span>
+            </a>
+            <a href="{$permission.U_DELETE}" onclick="return confirm( document.getElementById('btn_delete').title + '\n\n' + '{'Are you sure?'|@translate|@escape:'javascript'}');">
+              <span class="icon-trash" style="font-size: 18px;"></span>
+            </a>
+          </td>
 
-<table class="table2" style="margin:15px auto;">
-  <tr class="throw">
-    <th>{'Who?'|@translate}</th>
-    <th>{'Where?'|@translate}</th>
-    <th>{'Options'|@translate}</th>
-    <th>{'Actions'|@translate}</th>
-  </tr>
-{if not empty($permissions)}
-  {foreach from=$permissions item=permission name=permission_loop}
-  <tr class="{if $smarty.foreach.permission_loop.index is odd}row1{else}row2{/if}{if $permission.HIGHLIGHT} rowSelected{/if}">
-    <td>{$permission.WHO}</td>
-    <td>{$permission.WHERE}</td>
-    <td>
-      <span title="{$permission.TRUST_TOOLTIP}">{$permission.TRUST}</span>{if $permission.RECURSIVE},
-<span title="{$permission.RECURSIVE_TOOLTIP}">{'sub-albums'|@translate}</span>{/if}{if $permission.NB_PHOTOS},
-<span title="{$permission.NB_PHOTOS_TOOLTIP}">{'%d photos'|@translate|sprintf:$permission.NB_PHOTOS}</span>{/if}{if $permission.STORAGE},
-<span title="{$permission.STORAGE_TOOLTIP}">{$permission.STORAGE}MB</span>{/if}
-    {if $permission.CREATE_SUBCATEGORIES}
-, {'sub-albums creation'|@translate}
+        </tr>
+      {/foreach}
     {/if}
-    </td>
-    <td class="permissionActions">
-      <a href="{$permission.U_EDIT}">
-        <img src="{$ROOT_URL}{$themeconf.admin_icon_dir}/edit_s.png" alt="{'edit'|@translate}" title="{'edit'|@translate}" />
-      </a>
-      <a href="{$permission.U_DELETE}" onclick="return confirm( document.getElementById('btn_delete').title + '\n\n' + '{'Are you sure?'|@translate|@escape:'javascript'}');">
-        <img src="{$ROOT_URL}{$themeconf.admin_icon_dir}/delete.png" id="btn_delete" alt="{'delete'|@translate}" title="{'Delete permission'|@translate}" />
-      </a>
-    </td>
-  </tr>
-  {/foreach}
-{/if}
-</table>
+  </table>
+</div>
