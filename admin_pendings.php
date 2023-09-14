@@ -256,8 +256,8 @@ foreach ($rows as $row)
       'FILE' => $row['file'],
       'DATE_CREATION' => empty($row['date_creation']) ? l10n('N/A') : format_date($row['date_creation']),
       'ALBUM' => $album,
-      )
-    );
+    )
+  );
 }
 
 // +-----------------------------------------------------------------------+

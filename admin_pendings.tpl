@@ -86,6 +86,15 @@
   color: #FFF;
   font-size: large;
 }
+
+.photo-selected-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.photo-selected-item {
+  text-align: left;
+}
 </style>
 {/literal}
 
@@ -95,6 +104,7 @@ let selection = [];
 
 $(document).ready(function(){
   selectionMode(false);
+  update_selection_content();
 
   function isSelectionMode() {
     return $("#toggleSelectionMode").is(":checked")
@@ -107,6 +117,10 @@ $(document).ready(function(){
     } else {
       $(".in-selection-mode").hide();
       $(".not-in-selection-mode").show();
+      // reset des éléments sélectionnés lors qu'on quitte le mode selection
+      selection = [];
+      $(".checkPhoto input[type=checkbox]").prop('checked', false);
+      checkSelectedRows();
     }
   }
 
@@ -114,6 +128,25 @@ $(document).ready(function(){
   $("#toggleSelectionMode").click(function () {
     selectionMode($(this).is(":checked"));
   });
+
+  function update_selection_content() {
+    if (selection.length === 0) {
+      $('.selection-mode-ul').hide();
+      $("#permitActionUserList").hide();
+    } else {
+      $("#permitActionUserList").show();
+      $('.selection-mode-ul').show();
+    }
+  }
+
+  function generate_list() {
+    const list = $(".photo-selected-list").empty();
+
+    for (const item of selection) {
+      let p = $("<p></p>").addClass("photo-selected-item").text(item);
+      list.append(p);
+    }
+  } 
 
   $("a.zoom").colorbox({rel:"zoom"});
 
@@ -124,15 +157,15 @@ $(document).ready(function(){
 
       if ($(checkbox).is(':checked')) {
         $(this).addClass("rowSelected");
-        if (selection.includes(value)) return;
-        selection.push(value);
+        if (!selection.includes(value)) selection.push(value);
       }
       else {
         $(this).removeClass("rowSelected");
-        if (!selection.includes(value)) return;
-        selection = selection.filter((i) => i !== value);
+        if (selection.includes(value)) selection = selection.filter((i) => i !== value);
       }
     });
+    update_selection_content();
+    generate_list();
   }
 
   $(".checkPhoto").click(function(event) {
@@ -159,6 +192,7 @@ $(document).ready(function(){
     return false;
   });
 
+  // Envoi du formulaire lors du clique sur le bouton de validation dans la card
   $(".validatePhoto").click(function () {
     let $form = $("#formPhotos");
     const value = $(this)[0].value;
@@ -173,6 +207,7 @@ $(document).ready(function(){
     });
   });
 
+  // Envoi du formulaire lors du clique sur le bouton de rejet dans la card
   $(".rejectPhoto").click(function () {
     let $form = $("#formPhotos");
     const value = $(this)[0].value;
@@ -193,7 +228,7 @@ $(document).ready(function(){
 {if !empty($photos) }
 
 <form id="formPhotos" method="post" action="">
-  <div class="selection-mode-group-manager" style="width:13%;right:30px;">
+  <div class="selection-mode-group-manager" style="width:14%;">
     <div style="display:flex;justify-content:right;align-items:center;">
       <label class="switch">
         <input type="checkbox" id="toggleSelectionMode">
@@ -250,7 +285,7 @@ $(document).ready(function(){
           <strong><p>{'Album'|@translate}: <span style="color:#000;">{$photo.ALBUM}</span></p></strong>
           <strong><p>{'Name'|@translate}: <span style="color:#000;margin:0;">{$photo.NAME} {$photo.FILE}</span></p></strong>
           <strong><p>{'Créée le'|@translate}: <span style="color:#000;margin:0;">{$photo.ADDED_ON}</span></p></strong>
-          <strong><p>{'Permission'|@translate}: <span style="color:#000;margin:0;">{$photo}</span> <i class="icon-help-circled"></i></p></strong>
+          <strong><p>{'Permission'|@translate}: <span style="color:#000;margin:0;">{'Everyone'|@translate}</span> <i class="icon-help-circled"></i></p></strong>
 
           <div class="not-in-selection-mode">
             <button value="{$photo.ID}" type="button" class="validatePhoto btn orange rounded"><i class="icon-ok"></i> Valider</button>
