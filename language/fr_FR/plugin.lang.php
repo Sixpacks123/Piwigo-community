@@ -23,6 +23,7 @@
 
 $lang['Add a permission'] = 'Ajouter une permission';
 $lang['Who?'] = 'Qui ?';
+$lang['Trust'] = 'Confiance';
 $lang['any visitor'] = 'n\'importe quel visiteur';
 $lang['any registered user'] = 'n\'importe quel utilisateur enregistré';
 $lang['a specific user'] = 'un utilisateur en particulier';
