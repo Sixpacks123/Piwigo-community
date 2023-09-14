@@ -49,7 +49,7 @@ if (!empty($_POST))
     array_push(
       $page['errors'],
       l10n('Select at least one photo')
-      );
+    );
   }
   else
   {
@@ -114,8 +114,8 @@ DELETE
 $template->set_filenames(
   array(
     'plugin_admin_content' => dirname(__FILE__).'/admin_pendings.tpl'
-    )
-  );
+  )
+);
 
 // +-----------------------------------------------------------------------+
 // | pending photos list                                                   |
@@ -267,11 +267,11 @@ foreach ($rows as $row)
 // image level options
 $selected_level = isset($_POST['level']) ? $_POST['level'] : 0;
 $template->assign(
-    array(
-      'level_options'=> get_privacy_level_options(),
-      'level_options_selected' => array($selected_level)
-    )
-  );
+  array(
+    'level_options'=> get_privacy_level_options(),
+    'level_options_selected' => array($selected_level)
+  )
+);
 
 
 // +-----------------------------------------------------------------------+
