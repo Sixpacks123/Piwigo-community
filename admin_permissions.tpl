@@ -98,15 +98,6 @@ input[type="radio"]:checked {
     outline: none;
     cursor: pointer;
 }
-
-
-
-
-
-
-
-
- 
 </style>
 {/literal}
 
