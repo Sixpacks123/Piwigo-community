@@ -58,8 +58,48 @@
     .user-property-two{width:35%}
     #community_nb_photos, #community_storage {width:400px; display:inline-block; margin-right:10px;}
 
+    select option {
+      width: 1px;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+
     input[type="checkbox"] {
-      clip-path: circle(47% at 50% 50%);  }
+      width: 15px;
+      height: 15px;
+      background-color: white;
+      border-radius: 50%;
+      vertical-align: middle;
+      border: 2px solid orange;
+      appearance: none !important;
+      -webkit-appearance: none !important;
+      outline: none;
+      cursor: pointer;
+    }
+
+    input[type="checkbox"]:checked {
+      background-color: orange;
+    }
+
+
+    input[type="radio"]:checked {
+      background-color: orange;
+    }
+
+    input[type="radio"] {
+      width: 15px;
+      height: 15px;
+      background-color: white;
+      border-radius: 50%;
+      vertical-align: middle;
+      border: 2px solid orange;
+      appearance: none !important;
+      -webkit-appearance: none !important;
+      outline: none;
+      cursor: pointer;
+    }
+
     /* Permission Table */
     #permission-table {
       width:97%;
@@ -278,13 +318,23 @@
   jQuery("input[name=nb_photos]").val(nbPhotosValues[ui.value]);
   }
   });
-  jQuery("#community_nb_photos").css({"background" : "orange" , "height": "4px" });
+  jQuery("#community_nb_photos").css({"background" : "orange" , "height": "2px" });
   jQuery("#community_nb_photos .ui-slider-handle").css({
-  "width": "10px",
-  "height": "10px",
-  "border-radius": "50%",
-  "border" : "none",
-  "background": "orange"
+    "background-color": "#ffaf58",
+    "border": "none",
+    "border-radius": "25px",
+    "top": "-105px !important",
+    "width": "1.4em",
+    "height": "1.4em",
+    "top":"-.7em",
+  });
+
+  $('option').each(function () {
+    var text = $(this).text();
+    if (text.length > 100) {
+      text = text.substring(0, 99) + '...';
+      $(this).text(text);
+    }
   });
 
   var storageValues = [10,50,100,200,500,1000,5000,-1];
@@ -319,7 +369,7 @@
   });
 
   jQuery("#community_storage .ui-slider-handle").html('').css("border", "none");
-  jQuery("#community_storage .ui-slider-range").css("height", "4px");
+  jQuery("#community_storage .ui-slider-range").css("height", "2px");
 
   jQuery("#community_storage").css({"background" : "orange" , "height": "4px" });
   jQuery("#community_storage .ui-slider-handle").css({
@@ -399,11 +449,13 @@
 
         <br>
         <label>
+          <i class="icon-ok" style="color:white; position: absolute; left:30.5px;"></i>
           <input type="checkbox" name="recursive" {if $recursive}checked="checked"{/if}>
           <span>{'Apply to sub-albums'|@translate}</span>
         </label>
         <br>
         <label>
+          <i class="icon-ok" style="color:white; position: absolute; left:30.5px;"></i>
           <input type="checkbox" name="create_subcategories" {if $create_subcategories}checked="checked"{/if}>
           <span>{'ability to create sub-albums'|@translate}</span>
         </label>
@@ -414,10 +466,18 @@
           <strong>{'Which level of trust?'|@translate}</strong>
           <span class="icon-info-circled-1" style="color:orange;font-size:1.1em" title="{'low trust'|@translate} : {'uploaded photos must be validated by an administrator'|@translate}
 {'high trust'|@translate} : {'uploaded photos are directly displayed in the gallery'|@translate} "></span>
-          <br><label><input type="radio" name="moderated" value="true" {if $moderated}checked="checked"{/if}>
-            <em>{'low trust'|@translate}</em></label>
-          <br><label><input type="radio" name="moderated" value="false" {if not $moderated}checked="checked"{/if}>
-            <em>{'high trust'|@translate}</em> </label>
+          <br>
+          <label>
+            <i class="icon-ok" style="color:white; position: absolute; left:30.5px;"></i>
+            <input type="radio" name="moderated" value="true" {if $moderated}checked="checked"{/if}>
+            <em>{'low trust'|@translate}</em>
+          </label>
+          <br>
+          <label>
+            <i class="icon-ok" style="color:white; position: absolute; left:30.5px;"></i>
+            <input type="radio" name="moderated" value="false" {if not $moderated}checked="checked"{/if}>
+            <em>{'high trust'|@translate}</em>
+          </label>
         </p>
 
         <p style="margin-bottom:0">
