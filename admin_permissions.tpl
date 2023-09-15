@@ -5,7 +5,7 @@
 
 {literal}
 <style>
-form{text-align :center ; align:center;}
+form{text-align :center ; align:center; }
 form fieldset p {text-align:left;margin:0 0 1em 0;line-height:20px;}
 form fieldset strong {color: #A4A4A4;
   font-weight: bold;
@@ -29,7 +29,9 @@ box-sizing: border-box;
   border: none;
   width: 100%;
   padding: 10px;
-  font-size: 1.1em;}
+  font-size: 1.1em;
+  }
+
 .permissionActions {text-align:center;height:20px}
 .permissionActions a:hover {border:none}
 .permissionActions img {margin-bottom:-2px}
@@ -55,9 +57,56 @@ box-sizing: border-box;
   .user-property-one{width:65%}
     .user-property-two{width:35%}
 #community_nb_photos, #community_storage {width:400px; display:inline-block; margin-right:10px;}
-  
-   input[type="checkbox"] {
-  clip-path: circle(47% at 50% 50%);  }
+  select option {
+  width: 1px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;}
+
+  input[type="checkbox"] {
+    width: 15px;
+    height: 15px;
+    background-color: white;
+    border-radius: 50%;
+    vertical-align: middle;
+    border: 2px solid orange;
+    appearance: none !important;
+    -webkit-appearance: none !important;
+    outline: none;
+    cursor: pointer;
+}
+
+input[type="checkbox"]:checked {
+ 
+       background-color: orange;
+}
+
+
+input[type="radio"]:checked {
+    background-color: orange;
+}
+
+  input[type="radio"] {
+    width: 15px;
+    height: 15px;
+    background-color: white;
+    border-radius: 50%;
+    vertical-align: middle;
+    border: 2px solid orange;
+    appearance: none !important;
+    -webkit-appearance: none !important;
+    outline: none;
+    cursor: pointer;
+}
+
+
+
+
+
+
+
+
+ 
 </style>
 {/literal}
 
@@ -172,14 +221,26 @@ $(document).ready(function() {
       jQuery("input[name=nb_photos]").val(nbPhotosValues[ui.value]);
     }
   });
-jQuery("#community_nb_photos").css({"background" : "orange" , "height": "4px" });
+jQuery("#community_nb_photos").css({"background" : "orange" , "height": "2px" });
 jQuery("#community_nb_photos .ui-slider-handle").css({
-    "width": "10px", 
-    "height": "10px",
-    "border-radius": "50%", 
-    "border" : "none",
-    "background": "orange" 
+ "background-color": "#ffaf58",
+  "border": "none",
+  "border-radius": "25px",
+  "top": "-105px !important",
+  "width": "1.4em",
+  "height": "1.4em",
+  "top":"-.7em",
 });
+
+$('option').each(function () {
+  var text = $(this).text();
+  if (text.length > 100) {
+    text = text.substring(0, 99) + '...';
+    $(this).text(text);
+  }
+});
+
+
 
   var storageValues = [10,50,100,200,500,1000,5000,-1];
 
@@ -213,18 +274,19 @@ jQuery("#community_nb_photos .ui-slider-handle").css({
   });
 
   jQuery("#community_storage .ui-slider-handle").html('').css("border", "none");
-jQuery("#community_storage .ui-slider-range").css("height", "4px"); 
+jQuery("#community_storage .ui-slider-range").css("height", "2px"); 
 
-jQuery("#community_storage").css({"background" : "orange" , "height": "4px" });
+jQuery("#community_storage").css({"background" : "orange" , "height": "2px" });
 jQuery("#community_storage .ui-slider-handle").css({
-    "width": "10px", 
-    "height": "10px",
-    "border-radius": "50%", 
-    "border" : "none",
-    "background": "orange" 
+  "background-color": "#ffaf58",
+  "border-radius": "25px",
+  "top": "-105px !important",
+  "width": "1.4em",
+  "height": "1.4em",
+  "top":"-.7em",
 });
 jQuery("#community_storage .ui-slider-handle").html('').css("border", "none");
-jQuery("#community_storage .ui-slider-range").css("height", "4px"); 
+jQuery("#community_storage .ui-slider-range").css("height", "2px"); 
 
 });
 {/literal}{/footer_script}
@@ -290,12 +352,15 @@ jQuery("#community_storage .ui-slider-range").css("height", "4px");
   
       <br>
       <label>
-  <input type="checkbox" name="recursive" {if $recursive}checked="checked"{/if}>
+        <i class="icon-ok" style="color:white; position: absolute; left:30.5px;"></i>
+
+  <input  type="checkbox"  name="recursive" {if $recursive}checked="checked"{/if}>
   <span>{'Apply to sub-albums'|@translate}</span>
 </label>
 <br>
 <label>
-  <input type="checkbox" name="create_subcategories" {if $create_subcategories}checked="checked"{/if}>
+        <i class="icon-ok" style="color:white; position: absolute; left:30.5px;"></i>
+  <input  type="checkbox"  name="create_subcategories" {if $create_subcategories}checked="checked"{/if}>
   <span>{'ability to create sub-albums'|@translate}</span>
 </label>
 
@@ -305,9 +370,16 @@ jQuery("#community_storage .ui-slider-range").css("height", "4px");
       <strong>{'Which level of trust?'|@translate}</strong>
       <span class="icon-info-circled-1" style="color:orange;font-size:1.1em" title="{'low trust'|@translate} : {'uploaded photos must be validated by an administrator'|@translate} 
 {'high trust'|@translate} : {'uploaded photos are directly displayed in the gallery'|@translate} "></span>
-      <br><label><input type="radio" name="moderated" value="true" {if $moderated}checked="checked"{/if}>
+      <br>
+      <label>
+        <i class="icon-ok" style="color:white; position: absolute; left:30.5px;"></i>
+      <input type="radio" name="moderated" value="true" {if $moderated}checked="checked"{/if}>
        <em>{'low trust'|@translate}</em></label>
-      <br><label><input type="radio" name="moderated" value="false" {if not $moderated}checked="checked"{/if}>
+      <br>
+      <label>
+              <i class="icon-ok" style="color:white; position: absolute; left:30.5px;"></i>
+
+      <input type="radio" name="moderated" value="false" {if not $moderated}checked="checked"{/if}>
        <em>{'high trust'|@translate}</em> </label>
     </p>
 
