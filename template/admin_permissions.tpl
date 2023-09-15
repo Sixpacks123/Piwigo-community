@@ -371,16 +371,17 @@
   jQuery("#community_storage .ui-slider-handle").html('').css("border", "none");
   jQuery("#community_storage .ui-slider-range").css("height", "2px");
 
-  jQuery("#community_storage").css({"background" : "orange" , "height": "4px" });
+  jQuery("#community_storage").css({"background" : "orange" , "height": "2px" });
   jQuery("#community_storage .ui-slider-handle").css({
-  "width": "10px",
-  "height": "10px",
-  "border-radius": "50%",
-  "border" : "none",
-  "background": "orange"
+    "background-color": "#ffaf58",
+    "border-radius": "25px",
+    "top": "-105px !important",
+    "width": "1.4em",
+    "height": "1.4em",
+    "top":"-.7em",
   });
   jQuery("#community_storage .ui-slider-handle").html('').css("border", "none");
-  jQuery("#community_storage .ui-slider-range").css("height", "4px");
+  jQuery("#community_storage .ui-slider-range").css("height", "2px");
 
   });
 {/literal}{/footer_script}
