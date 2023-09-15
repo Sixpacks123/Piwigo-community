@@ -23,6 +23,10 @@
   padding: 1em 1.5em;
 }
 
+.card.isSelect .descritpion {
+  background:#FFD9A7;
+}
+
 .descritpion p {
   color: #777;
   margin-block-start: 0;
@@ -195,10 +199,12 @@ $(document).ready(function(){
 
       if ($(checkbox).is(':checked')) {
         $(this).addClass("rowSelected");
+        $(this).parent().parent().addClass("isSelect");
         if (!selection.includes(value)) selection.push(value);
       }
       else {
         $(this).removeClass("rowSelected");
+        $(this).parent().parent().removeClass("isSelect");
         if (selection.includes(value)) selection = selection.filter((i) => i !== value);
       }
     });
@@ -319,7 +325,7 @@ $(document).ready(function(){
   <fieldset>
     <div style="width:82%;display:grid;grid-template-columns:repeat(3,1fr);gap:20px;">
       {foreach from=$photos item=photo name=photo}
-      <div style="box-shadow:0px 1px 5px rgba(0,0,0,0.3);">
+      <div class="card" style="box-shadow:0px 1px 5px rgba(0,0,0,0.3);">
         <div style="height:14em;display:flex;justify-content:center;align-items:center;background:#333;position:relative;">
           <a href="{$photo.U_EDIT}" class="externalLink link"><i class="icon-pencil"></i></a>
           <img src="{$photo.TN_SRC}" style="margin:1em">
