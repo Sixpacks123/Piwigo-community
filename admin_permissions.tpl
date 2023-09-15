@@ -77,6 +77,12 @@ box-sizing: border-box;
 }
 
 input[type="checkbox"]:checked {
+ 
+       background-color: orange;
+}
+
+
+input[type="radio"]:checked {
     background-color: orange;
 }
 
@@ -93,9 +99,9 @@ input[type="checkbox"]:checked {
     cursor: pointer;
 }
 
-input[type="radio"]:checked {
-    background-color: orange;
-}
+
+
+
 
 
 
@@ -346,11 +352,14 @@ jQuery("#community_storage .ui-slider-range").css("height", "2px");
   
       <br>
       <label>
+        <i class="icon-ok" style="color:white; position: absolute; left:30.5px;"></i>
+
   <input  type="checkbox"  name="recursive" {if $recursive}checked="checked"{/if}>
   <span>{'Apply to sub-albums'|@translate}</span>
 </label>
 <br>
 <label>
+        <i class="icon-ok" style="color:white; position: absolute; left:30.5px;"></i>
   <input  type="checkbox"  name="create_subcategories" {if $create_subcategories}checked="checked"{/if}>
   <span>{'ability to create sub-albums'|@translate}</span>
 </label>
@@ -362,10 +371,15 @@ jQuery("#community_storage .ui-slider-range").css("height", "2px");
       <span class="icon-info-circled-1" style="color:orange;font-size:1.1em" title="{'low trust'|@translate} : {'uploaded photos must be validated by an administrator'|@translate} 
 {'high trust'|@translate} : {'uploaded photos are directly displayed in the gallery'|@translate} "></span>
       <br>
-      <label><input type="radio" name="moderated" value="true" {if $moderated}checked="checked"{/if}>
+      <label>
+        <i class="icon-ok" style="color:white; position: absolute; left:30.5px;"></i>
+      <input type="radio" name="moderated" value="true" {if $moderated}checked="checked"{/if}>
        <em>{'low trust'|@translate}</em></label>
       <br>
-      <label><input type="radio" name="moderated" value="false" {if not $moderated}checked="checked"{/if}>
+      <label>
+              <i class="icon-ok" style="color:white; position: absolute; left:30.5px;"></i>
+
+      <input type="radio" name="moderated" value="false" {if not $moderated}checked="checked"{/if}>
        <em>{'high trust'|@translate}</em> </label>
     </p>
 
