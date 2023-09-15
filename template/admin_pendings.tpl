@@ -57,8 +57,8 @@
 }
 
 .checkPhoto {
-  width: 3em;
-  height: 3em;
+  width: 2.3em;
+  height: 2.3em;
   position: absolute;
   display: flex;
   top: 1em;
@@ -90,10 +90,20 @@
 .photo-selected-list {
   display: flex;
   flex-direction: column;
+  gap: 1em;
 }
 
 .photo-selected-item {
+  display: flex;
+}
+
+.photo-selected-item p {
   text-align: left;
+  padding: 0 !important;
+  margin: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 </style>
 {/literal}
@@ -101,10 +111,21 @@
 {literal}
 <script type="text/javascript">
 let selection = [];
+let photos = [];
 
 $(document).ready(function(){
   selectionMode(false);
   update_selection_content();
+  update_photos();
+
+  function update_photos() {
+    const inputs = $(".checkPhoto input[type=checkbox]");
+    const photos_name = $(".photo-name").text().trim().split(" ");
+
+    for (let i = 0; i < inputs.length; i++) {
+      photos.push({ id: inputs[i].value, name: photos_name[i] });
+    }
+  }
 
   function isSelectionMode() {
     return $("#toggleSelectionMode").is(":checked")
@@ -143,10 +164,27 @@ $(document).ready(function(){
     const list = $(".photo-selected-list").empty();
 
     for (const item of selection) {
-      let p = $("<p></p>").addClass("photo-selected-item").text(item);
-      list.append(p);
+      const photo_name = photos.find((p) => p.id === item);
+
+      const div = $("<div></div>").addClass("photo-selected-item");
+      const icon = $("<a></a>").addClass("icon-cancel photo-selected-action").attr("data-id", item);
+      const p = $("<p></p>").text(photo_name.name);
+
+      div.append(icon);
+      div.append(p);
+      list.append(div);
     }
-  } 
+
+    $(".photo-selected-action").click(function (e) {
+      const id = $(this).attr("data-id");
+
+      $(".checkPhoto input[type=checkbox]").each(function () {
+        if ($(this)[0].value !== id) return;
+        $(this).prop('checked', false);
+        checkSelectedRows();
+      });
+    });
+  }
 
   $("a.zoom").colorbox({rel:"zoom"});
 
@@ -205,6 +243,9 @@ $(document).ready(function(){
       url: "",
       data: serializedData,
     });
+
+    // force reload mais affiche pas les messages de succès
+    window.location.reload();
   });
 
   // Envoi du formulaire lors du clique sur le bouton de rejet dans la card
@@ -220,6 +261,9 @@ $(document).ready(function(){
       url: "",
       data: serializedData,
     });
+
+    // force reload mais affiche pas les messages de succès
+    window.location.reload();
   });
 });
 </script>
@@ -238,9 +282,14 @@ $(document).ready(function(){
     </div>
 
     <div class="in-selection-mode">
+      <div class="selection-mode-ul">
+        <p style="width:100%;margin: 1em auto;padding:0;">{'Your selection'|@translate}</p>
+        <div class="photo-selected-list"></div>
+      </div>
+
       <legend>{'Who can see these photos?'|@translate}</legend>
 
-      <select name="level" size="1">
+      <select name="level" size="1" style="background:#FFF;width:100%;padding:0.6em;">
         {html_options options=$level_options selected=$level_options_selected}
       </select>
 
@@ -252,13 +301,14 @@ $(document).ready(function(){
   </div>
 
   <fieldset style="height:2em;display:flex;align-items:center;">
-    <p class="not-in-selection-mode icon-help-circled">{'Validez ou rejetez les photos en attente'|@translate}</p>
+    <p class="not-in-selection-mode icon-help-circled" style="margin:0;">{'Validate or reject pending photos'|@translate}</p>
 
     <div class="in-selection-mode">
       <div id="checkActions">
         <span>{'Select'|@translate}</span>
         <a href="#" id="selectAllPage">{'The whole page'|@translate}</a>
-        <a href="#" id="selectSet">{'The whole set'|@translate}</a><span class="loading" style="display:none"><img src="themes/default/images/ajax-loader-small.gif"></span>
+        {* TODO *}
+        {* <a href="#" id="selectSet">{'The whole set'|@translate}</a><span class="loading" style="display:none"><img src="themes/default/images/ajax-loader-small.gif"></span> *}
         <a href="#" id="selectNone">{'None'|@translate}</a>
         <a href="#" id="selectInvert">{'Invert'|@translate}</a>
         <span id="selectedMessage"></span>
@@ -283,7 +333,7 @@ $(document).ready(function(){
         <div class="descritpion">
           <strong><p>{'User'|@translate}: <span style="color:#000;">{$photo.ADDED_BY}</span></p></strong>
           <strong><p>{'Album'|@translate}: <span style="color:#000;">{$photo.ALBUM}</span></p></strong>
-          <strong><p>{'Name'|@translate}: <span style="color:#000;margin:0;">{$photo.NAME} {$photo.FILE}</span></p></strong>
+          <strong><p>{'Name'|@translate}: <span class="photo-name" style="color:#000;margin:0;">{$photo.NAME} {$photo.FILE}</span></p></strong>
           <strong><p>{'Créée le'|@translate}: <span style="color:#000;margin:0;">{$photo.ADDED_ON}</span></p></strong>
           <strong><p>{'Permission'|@translate}: <span style="color:#000;margin:0;">{'Everyone'|@translate}</span> <i class="icon-help-circled"></i></p></strong>
 
